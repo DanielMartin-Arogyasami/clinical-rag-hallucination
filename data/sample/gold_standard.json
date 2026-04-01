@@ -1,0 +1,28 @@
+[
+  {
+    "source": "ae_narrative_001.txt",
+    "AETERM": "headache",
+    "AEDECOD": "Headache",
+    "AEBODSYS": "Nervous system disorders",
+    "AESEV": "MODERATE",
+    "AESER": "N",
+    "AEREL": "POSSIBLE",
+    "AESTDTC": "2024-03-15",
+    "AEENDTC": "2024-03-17",
+    "AEOUT": "RECOVERED/RESOLVED",
+    "AEACN": "DOSE NOT CHANGED"
+  },
+  {
+    "source": "ae_narrative_002.txt",
+    "AETERM": "nausea",
+    "AEDECOD": "Nausea",
+    "AEBODSYS": "Gastrointestinal disorders",
+    "AESEV": "SEVERE",
+    "AESER": "Y",
+    "AEREL": "PROBABLE",
+    "AESTDTC": "2024-04-01",
+    "AEENDTC": "2024-04-05",
+    "AEOUT": "RECOVERED/RESOLVED",
+    "AEACN": "DRUG INTERRUPTED"
+  }
+]

@@ -1,0 +1,33 @@
+# Clinical RAG Extractor — Cursor AI Project Rules
+
+## What This Is
+Python implementation of a 5-stage hallucination mitigation pipeline for clinical
+data extraction. Companion repo to the paper "Mitigating LLM Hallucinations for
+Clinical Data Extraction: A RAG Framework with Structured Output Enforcement".
+Uses ONLY public data (CDISC Pilot, synthetic SDTM, public ontologies).
+
+## 5-Stage Pipeline
+1. Ingestion — parse clinical docs, section-aware chunking with metadata
+2. Retrieval — hybrid BM25 + dense (PubMedBERT) + cross-encoder reranking
+3. Generation — LLM with Pydantic-constrained structured outputs (Instructor)
+4. Grounding — NLI-based evidence verification, provenance chain
+5. Confidence — entropy + self-consistency + NLI → calibrated abstention
+
+## Stack
+Python 3.11+, Pydantic v2, LiteLLM, Instructor, sentence-transformers,
+rank-bm25, FAISS, HuggingFace transformers (DeBERTa for NLI)
+
+## Rules
+- Type hints everywhere, strict mypy
+- Pydantic models for ALL data structures
+- Every extraction carries ExtractionProvenance
+- Output UNABLE_TO_DETERMINE rather than guess
+- Safety-critical fields (AE coding) get stricter thresholds
+- One import per line (ruff I rules)
+- No pickle for deserialization — JSON only
+
+## Domain Terms
+SDTM=Study Data Tabulation Model, MedDRA=Medical Dictionary for Regulatory
+Activities, LOINC=Logical Observation Identifiers Names and Codes,
+CDISC=Clinical Data Interchange Standards Consortium, AE=Adverse Event,
+LB=Laboratory, CM=Concomitant Medication, PT=Preferred Term, SOC=System Organ Class

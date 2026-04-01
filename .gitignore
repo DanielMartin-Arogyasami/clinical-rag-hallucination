@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+dist/
+build/
+.env
+data/indices/
+data/ontologies/meddra/*.asc
+data/ontologies/loinc/*.csv
+results/
+logs/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+*.faiss
+*.pkl

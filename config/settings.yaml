@@ -1,0 +1,64 @@
+pipeline:
+  name: "clinical-rag-extractor"
+  version: "0.1.0"
+
+ingestion:
+  supported_formats: [pdf, docx, txt, csv, json]
+  chunking:
+    strategy: "section_aware"
+    target_chunk_tokens: 256
+    max_chunk_tokens: 512
+    overlap_fraction: 0.15
+    preserve_tables: true
+
+retrieval:
+  bm25:
+    k1: 1.5
+    b: 0.75
+    top_k: 50
+  dense:
+    model: "pritamdeka/PubMedBERT-mnli-snli-scinli-scitail-mednli-stsb"
+    embedding_dim: 768
+    top_k: 50
+    index_type: "Flat"
+    normalize_embeddings: true
+    device: "cpu"
+  reranker:
+    model: "cross-encoder/ms-marco-MiniLM-L-12-v2"
+    top_k_input: 40
+    top_k_output: 8
+    batch_size: 16
+  fusion:
+    method: "reciprocal_rank"
+    rrf_k: 60
+
+generation:
+  provider: "openai"
+  model: "gpt-4o"
+  temperature: 0.0
+  max_tokens: 4096
+  timeout_seconds: 120
+  max_retries: 3
+
+grounding:
+  nli_model: "microsoft/deberta-v3-large-mnli"
+  device: "cpu"
+  support_thresholds:
+    fully_supported: 0.85
+    partially_supported: 0.50
+  max_source_spans: 3
+
+confidence:
+  signals:
+    token_entropy: { enabled: true, weight: 0.2 }
+    self_consistency: { enabled: true, num_samples: 5, temperature: 0.7, weight: 0.3 }
+    evidence_support: { enabled: true, weight: 0.5 }
+  abstention:
+    safety_critical_threshold: 0.80
+    standard_threshold: 0.60
+    calibration_method: "isotonic"
+
+evaluation:
+  retrieval_metrics: [recall_at_k, ndcg_at_k, precision_at_5]
+  generation_metrics: [exact_match, token_f1, factscore]
+  clinical_metrics: [hit_at_1, hit_at_3, f0_5_score, f2_score, auroc]
